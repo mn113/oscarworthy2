@@ -94,6 +94,13 @@ class ComposerStaticInit40d77d9953c84a2d6a82db3cb2d3ae04
                 0 => __DIR__ . '/..' . '/psr/log',
             ),
         ),
+        'M' => 
+        array (
+            'Monolog' => 
+            array (
+                0 => __DIR__ . '/..' . '/monolog/monolog/src',
+            ),
+        ),
     );
 
     public static function getInitializer(ClassLoader $loader)

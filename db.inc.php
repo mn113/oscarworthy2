@@ -27,5 +27,19 @@ function db_connect() {
 
 $dbh = db_connect();
 
-require_once('apis/TMDb.php');
-$tmdb = new TMDb('b93175b049e96a26b1aeb18429a433d6');
+//require_once('apis/TMDb.php');
+//$tmdb = new TMDb('b93175b049e96a26b1aeb18429a433d6');
+
+require_once dirname(__DIR__).'/vendor/autoload.php';
+
+$token  = new \Tmdb\ApiToken('your_tmdb_api_key_here');
+$client = new \Tmdb\Client($token, [
+				'secure' => false,
+				'cache' => [
+					'path' => '/tmp/php-tmdb'
+				],
+				'log' => [
+			        'enabled' => true,
+			        'handler' => new \Monolog\Handler\ChromePHPHandler()
+				]
+			]);
