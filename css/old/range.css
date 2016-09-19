@@ -1,0 +1,61 @@
+#wrapper {	/* NOT USED */
+	background: #666;
+	padding:0px 6px;
+	width:200px; 
+	height:16px;
+}
+
+.slider { 
+	background:#ccc; 
+	height:2px; 
+	position:relative; 
+	cursor:pointer;  
+	border:1px inset #333;
+	width:150px;
+	margin:10px 0 0 12px;
+	float:left; 	
+	border-radius:2px;
+}
+
+.progress {
+	height:2px; 
+	background-color:#698b99;
+	display:none;
+}
+
+.handle { 
+	background:#698b99; 
+	height:12px;
+	width:4px;
+	top:-6px;
+	position:absolute; 
+	display:block;
+	cursor:move;
+	border:1px solid #333;
+	border-radius:6px;
+}
+
+.handle:hover {
+	background-image:none;			
+}
+
+a.handle:active {
+	background-color:#34454c;
+}
+
+.range {	/* The text box with value */
+	float:left;
+	margin:4px;
+	border:0;
+	padding:0;
+	background:transparent;
+	width:1em;
+	text-align:left;
+	color: #999;
+}
+
+.range:focus {
+	background-color:#eee;
+	color:#f30;	
+}
+

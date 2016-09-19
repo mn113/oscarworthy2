@@ -1,0 +1,147 @@
+//	awards: write 'actor for film' in list
+//	db: need way to indicate merged entities -> aliases table
+//	awards: list sorting by ajax plugin
+
+0	fix utf-8 issues with db
+
+1	search: switch to jQuery autocomplete
+	search: populate autocomplete by progressive gets, //limit to 10 per cat
+
+2	awards: display icon on film/person pages
+	awards: generate categories dropdown based on ceremony selection
+	awards: find some way to check for duff id matches (script comparing name + year & echoing)
+
+3	home: popular modules
+
+4	profile: build user's taste
+	profile: make seed user martin populate everyone's empty slots
+/	profile: recommend films based on your taste in talent
+	profile: predict each film's quality based on talent scores
+	profile: manual faves
+
+5	amazon affiliation?
+	ads?
+
+6	more mature SessionHandler to save sessions etc?
+
+7	more sophisticated message system
+
+8	pop_ppl: people -> manual list? feed?
+
+9	db: lookup & store rt_id to reduce searching
+/	build tmdb <-> imdb <-> rt <-> crit lookup table or functions
+/	tmdb <-> imdb
+/	rt	 <-> imdb
+	crit  -> imdb
+	
+	stronger convention for page templating: consistency of htags and function echo/returns
+
+	singleton db class?
+
+/	class.Filmography
+	class.Form
+	
+	film: scrape criticker avg tier -> need api
+
+	make genres linkable > filters on browse page
+	make countries linkable
+	make years linkable
+
+	db: reorder columns prettily
+
+	PHPUnit testing
+	
+	security: fix local ssl certificate
+	security: buy $20 ssl cert
+
+	activation time limit 72h
+
+	feedback: allow gravatar / open_id / gmail / facebook logins
+
+	user: suspend account
+
+	when a new film is added, update all its cast members? -> only necessary later
+	when a new person is loaded, who worked recently, every 10th time, drop'n'import?
+
+	start blacklist for bad fids (dupes) > how to redirect?
+	obtain ip blacklist for users
+	
+
+// BUGS
+3	[db]	title mismatch on let the right one in vs tomas alfredson filmography
+3	[db]	title mismatch on in time vs now
+1	[db]	no cast or crew						/film/603	-> need to rebuild db
+1	[db]	utf8 character display problem		/film/101
+
+
+// FORMS			//method	//filter	//js_val	//php::val		//csrf		//refer		//captcha	//enter_sub
+register			POST		YES			YES			YES				YES			YES			YES	
+login				POST		YES			NO			NO				YES			YES			NO			YES
+activate			GET			YES			NO			NO				NO			NO			NO
+change_email		POST		YES			*NO			YES				YES			YES			NO
+change_password		POST		YES			*NO			YES				YES			YES			NO
+search				GET			YES			NO			NO				NO			NO			NO			YES
+awards				GET			NO			NO			NO				NO			NO			NO			N/A
+feedback			POST		YES			NO			NO				YES			YES			YES			YES
+
+
+// STRUCTURE	
+----------	
+/home (popular + spread)
+/actors (popular + search)
+/films (popular + search)
+/popular (?)
+/awards
+/about + feedback (guestbook)
+/search
+/register
+/login
+/profile (recommendations)
+/terms
+
+
+// AWARDS
+oscars
+  *film
+  *director
+  *actor
+  *actress
+  *supp.actor
+  *supp.actress
+  *forn.film
+  *animated
+globes
+  *film
+baftas
+  *film
+cannes
+  *palme d'or
+venice
+  *golden lion - film
+  *golden lion - person
+  *silver lion - film
+  *silver lion - person
+berlin
+  *golden bear - film
+  *golden bear - person
+sundance
+  *film
+cesars
+  *film
+  *forn.film
+australians
+  *film
+sag
+  *actor
+  *actress
+  *supp.actor
+  *supp.actress
+razzies
+  *film
+  *director
+  *actor
+  *actress
+  *supp.actor
+  *supp.actress
+critics choice
+wga

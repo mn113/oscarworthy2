@@ -1,0 +1,349 @@
+/****************/
+/* FILM DETAILS */
+/****************/
+.frame {
+	width: 200px;
+	padding: 8px 8px 4px;
+	background: white;
+	border: 1px solid #ccc;
+	box-shadow: 0 0 5px #999;
+	border-radius: 4px;
+}
+img.poster, img.headshot {
+	width:198px;
+	margin: auto;
+	border: 1px solid #ccc;
+	box-shadow: 0 0 5px #999 inset;
+}
+img.thumb {
+	width: 50px;
+	border: 2px solid #ccc;
+}
+dt {
+	float:left;
+	font-weight: bold;
+	margin-right: 5px;
+	clear: left;
+}
+dd {
+	clear: right;
+}
+#similar_movies {
+	list-style: none;
+	background: #ffe;
+}
+#similar_movies li small {
+	width: 92px;
+}
+
+.next, .prev {float:right}
+
+.delete {
+	position: absolute;
+	left: 275px;
+	height:16px;
+	width: 16px;
+	background: url(../img/delete.gif) 0 -16px no-repeat;
+}
+#rename input {display: none;}
+
+
+/*****************/
+/* FILM LISTINGS */
+/*****************/
+#cast_box, #crew_box, #filmography_box {
+	position: relative;
+}
+
+#starlegend {
+	padding: 4px 6px;
+	color: #159;
+	font-variant: small-caps;
+	position: absolute;
+	top: -70px;
+	right:0;
+	width:10em;
+	border: 1px solid #d8d8d8;
+	border-radius: 4px;
+}
+#starlegend p {
+	margin: 0;
+	color: #aaa;
+}
+.leghead {
+	font-weight: bold;
+}
+.leg1 {
+	height:16px;
+	padding-left:20px;
+	background: url(../img/star.gif) left -48px no-repeat;
+}
+.leg2 {
+	height:16px;
+	padding-left:20px;
+	background: url(../img/star.gif) left -32px no-repeat;
+}
+a.expander, a.expander:hover, a.expander:active, a.expander:visited {
+	float: right;
+	xdisplay: block;
+	border: 1px solid #ddd;
+	border-bottom: 0;
+	border-radius: 8px 8px 0 0;
+	padding: 2px 1em;
+	color: #999;
+	text-decoration: none;
+}
+
+
+/***************/
+/* FILM TABLES */
+/***************/
+#filmography_box h2 {
+	margin-bottom: 0;
+	float: left;
+	margin-right: 1em;
+}
+#filmography_box span {
+	margin-bottom: 0;
+	float: left;
+	color: #ccc;
+	font-weight: bold;
+	line-height: 2.6rem;
+}
+#filmography_box table {
+	margin-bottom: 50px;
+}
+#listing table {
+	width: 100%;
+	clear: both;
+}
+td, th {
+	border: 1px dotted #ccc;
+	padding: 0.2em 0.4em;
+}
+
+
+/***************/
+/* SEARCH PAGE */
+/***************/
+.query {
+	color: #f30;
+}
+.hilite {
+	color: #f30;
+	background: #ffc;	
+}
+.aka {
+	clear: both;
+	font-style: italic;
+	text-indent: 1em;
+	display: block;
+}
+#results_films {
+	list-style: inside url(../img/icons/f.png);
+}
+#results_people {
+	list-style: inside url(../img/icons/p.png);
+}
+.rankbar {
+	background: #f30;
+	height: 8px;
+	float: left;
+}
+
+
+/**********/
+/* AWARDS */
+/**********/
+.winner		{background: #ffd;}
+.nominated	{background: white;}
+
+
+/*********/
+/* FORMS */
+/*********/
+.thin {
+	width: 40%;
+}
+fieldset {
+	background: #fff8f4;
+}
+form p {
+	position: relative;
+}
+legend {
+	font-weight: bold;
+	font-size: 1.6rem; font-size: 16px;
+	padding: 0 0.4em;
+}
+fieldset {
+	outline: 1;
+	padding: 0.8em 1.2em;
+}
+label {
+	float: left;
+	width: 8em; 
+	text-align: right;
+}
+input[type=text], input[type=password] {
+	margin-left: 5px;
+	font-size: 1.4rem; font-size:14px;
+}
+input[type=submit] {
+	float: right;
+}
+.hint {
+	display: none;
+	position: absolute;
+	top: 5px;
+	padding: 0.4em;
+	background: white;
+	border-radius: 0 8px 8px 8px;
+	border: 1px solid #698b99;
+	box-shadow: 0 0 5px #999;
+	z-index:1;
+}
+input.valid {
+	border: 1px solid green;
+	background: white url(../img/icons/tick.png) right center no-repeat;
+}
+input.invalid {
+	border: 1px solid red;
+	background: white;
+}
+textarea {
+
+}
+#awards {
+	width: 100%;
+}
+#awards label {
+	float: none;
+	text-align: left;
+	width: auto;
+}
+#awards select {
+	margin-right: 2em;
+}
+
+
+/************/
+/* FEEDBACK */
+/************/
+#comments_filter, #feedback {
+	width: 60%;
+	padding: 8px 12px;
+	color: #666;
+}
+#comments_filter {
+	background: #e0e4e8;
+	border: 1px solid #d8d4d0;
+}
+#comments_filter label {
+	float: left;
+}
+#comments_filter span {
+	float: right;
+}
+#comments label, #feedback label, #feedback_reply label {
+	float: none;
+}
+#comments {
+	width: 60%;
+	background: #f8f4f0;
+	padding: 16px 12px;
+	border: 1px solid #d8d4d0;
+}
+.comment {
+	border: 1px solid #d8d4d0;
+	border-radius: 0 15px 0 0;
+	margin-bottom: 8px;
+	background: white url(../img/comment_header_bg.png) repeat-y;
+	position: relative;
+}
+.comment.reply, #feedback_reply {
+	margin-left: 30px;
+}
+.comment .heading {
+	background: #e0e4e8;
+	xborder-right: 1px solid #f30;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	display: block;
+	float: left;
+	width: 132px;
+}
+.comment.owner .heading {
+	background: #edc;
+}
+.comment .heading span {
+	font-weight: bold;
+	color: #f30;
+}
+.comment .cbody {
+	padding: 6px 12px;
+	float: left;
+	width: 325px;
+}
+.comment .cbody em {
+	position: absolute;
+	top:0;
+	right:4px;
+	color: #ccc;
+	font-weight: bold;
+}
+.comment .cbody span {
+	position: absolute;
+	right:2px;
+	bottom:2px;
+	border: 1px solid #bbb;
+	background: #ddd;
+	padding: 0 3px;
+	text-align: center;
+	font-size: 1.1rem; font-size:11px;
+	color: white;
+	font-style: italic;
+}
+.comment .cbody span:hover {
+	background: #f30;
+	cursor: pointer;
+}
+.comment .reply_btn {
+}
+.comment .upvote_btn {
+	bottom: 13px;
+/* icon */
+}
+.comment .flag_btn {
+	bottom: 24px;
+/* icon */
+}
+.used {
+	background: #cfc url(../img/icons/tick.png) center center no-repeat;
+}
+
+
+/***********/
+/* POPULAR */
+/***********/
+#popular #main ol {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 4px 0;
+	list-style: none inside;
+}
+
+#popular #main .listbox {
+	float: left;
+	width: 40%;
+}
+#popular #main li {
+	background: white;
+	padding: 2px 8px;
+}
+#popular #main li.odd {
+	background: #f0f4f8;
+}
+#popular #main li img {
+	float: right;
+}
