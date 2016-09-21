@@ -23,6 +23,15 @@ $cur = $_SERVER['REQUEST_URI'];
 
 
 // Geolocation:
-$geo = GeoLoc::getInfoFromIP($_SERVER['REMOTE_ADDR']);
-FB::log($_SERVER['REMOTE_ADDR'], 'ip');
-FB::log($geo, 'geoloc');
+//$geo = GeoLoc::getInfoFromIP($_SERVER['REMOTE_ADDR']);
+//FB::log($_SERVER['REMOTE_ADDR'], 'ip');
+//FB::log($geo, 'geoloc');
+
+// Logging with Monolog:
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+$log = new Logger('name');
+$log->pushHandler(new StreamHandler('/logs/tmdb_site.log', Logger::WARNING));
+$log->warning('Foo');
+$log->error('Bar');

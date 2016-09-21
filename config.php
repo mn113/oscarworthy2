@@ -38,8 +38,8 @@ define('WARNING', E_USER_NOTICE);
 // Includes:
 require_once('db.inc.php');
 include_once('inc/functions.php');
-include_once('FirePHPCore/FirePHP.class.php');
-include_once('FirePHPCore/fb.php');
+//include_once('FirePHPCore/FirePHP.class.php');
+//include_once('FirePHPCore/fb.php');
 include_once('securimage/securimage.php');
 include_once('apis/RottenTomatoesApi.php');
 
@@ -54,6 +54,9 @@ function __autoload($class_name) {
 		}
 	}
 }
+
+// Composer dependencies autoload:
+require __DIR__ . '/vendor/autoload.php';
 
 // Script particularities:
 $base = basename($_SERVER['SCRIPT_NAME'], '.php');

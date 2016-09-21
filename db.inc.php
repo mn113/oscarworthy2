@@ -5,7 +5,7 @@
 DEFINE ('DB_USER', 'martin');
 DEFINE ('DB_PASSWORD', 'c4n4l+!');
 DEFINE ('DB_HOST', 'localhost');
-DEFINE ('DB_NAME', 'actgoat');
+DEFINE ('DB_NAME', 'oscarworthy');
 
 
 function db_connect() {
@@ -16,8 +16,8 @@ function db_connect() {
 
 	// PDO Error reporting:
 	//$dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT );  
-	//$dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );  
-	$dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
+	$dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING );  
+	//$dbh->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION ); 
 
 	return ($dbh);
 }
@@ -30,7 +30,7 @@ $dbh = db_connect();
 //require_once('apis/TMDb.php');
 //$tmdb = new TMDb('b93175b049e96a26b1aeb18429a433d6');
 
-require_once dirname(__DIR__).'/vendor/autoload.php';
+/*require_once('/vendor/autoload.php');
 
 $token  = new \Tmdb\ApiToken('your_tmdb_api_key_here');
 $client = new \Tmdb\Client($token, [
@@ -40,6 +40,7 @@ $client = new \Tmdb\Client($token, [
 				],
 				'log' => [
 			        'enabled' => true,
-			        'handler' => new \Monolog\Handler\ChromePHPHandler()
+			        'handler' => new \Monolog\Handler\FirePHPHandler()
 				]
 			]);
+*/

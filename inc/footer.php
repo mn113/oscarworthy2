@@ -8,7 +8,7 @@
 			<h4>Sitemap</h4>
 			<ul>
 				<li><a href="/">Home</a></li>
-				<li><a href="/films/">Films</a></li>
+				<li><a href="/film/">Films</a></li>
 				<li><a href="/actors/">Actors</a></li>
 				<li><a href="/awards/">Awards</a></li>
 				<li><a href="/search/">Search</a></li>
@@ -58,9 +58,9 @@ if (isset($cache)) $cache->create();
 
 // Debug messages:
 if (DEBUG_MODE) {
-	FB::log($_SERVER, '$_SERVER');
-	FB::log($_SESSION, '$_SESSION');
-	FB::log($_COOKIE, '$_COOKIE');
-	if (isset($_SESSION['user'])) FB::log($_SESSION['user'], '$_SESSION[user]');
+	//FB::log($_SERVER, '$_SERVER');
+	//FB::log($_SESSION, '$_SESSION');
+	//FB::log($_COOKIE, '$_COOKIE');
+	//if (isset($_SESSION['user'])) FB::log($_SESSION['user'], '$_SESSION[user]');
 
 }
