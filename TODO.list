@@ -1,6 +1,12 @@
 //	awards: write 'actor for film' in list
 //	db: need way to indicate merged entities -> aliases table
 //	awards: list sorting by ajax plugin
+//0	check local PHP version ok -> aim for 5.6
+
+0	my ErrorHandler vs Monolog vs FirePHP vs ?
+0	check for other APIs
+0	new TMDb API version
+0	serve with composer?
 
 0	fix utf-8 issues with db
 
@@ -33,14 +39,14 @@
 /	tmdb <-> imdb
 /	rt	 <-> imdb
 	crit  -> imdb
-	
+
 	stronger convention for page templating: consistency of htags and function echo/returns
 
 	singleton db class?
 
 /	class.Filmography
 	class.Form
-	
+
 	film: scrape criticker avg tier -> need api
 
 	make genres linkable > filters on browse page
@@ -50,7 +56,7 @@
 	db: reorder columns prettily
 
 	PHPUnit testing
-	
+
 	security: fix local ssl certificate
 	security: buy $20 ssl cert
 
@@ -65,7 +71,7 @@
 
 	start blacklist for bad fids (dupes) > how to redirect?
 	obtain ip blacklist for users
-	
+
 
 // BUGS
 3	[db]	title mismatch on let the right one in vs tomas alfredson filmography
@@ -75,7 +81,7 @@
 
 
 // FORMS			//method	//filter	//js_val	//php::val		//csrf		//refer		//captcha	//enter_sub
-register			POST		YES			YES			YES				YES			YES			YES	
+register			POST		YES			YES			YES				YES			YES			YES
 login				POST		YES			NO			NO				YES			YES			NO			YES
 activate			GET			YES			NO			NO				NO			NO			NO
 change_email		POST		YES			*NO			YES				YES			YES			NO
@@ -85,8 +91,8 @@ awards				GET			NO			NO			NO				NO			NO			NO			N/A
 feedback			POST		YES			NO			NO				YES			YES			YES			YES
 
 
-// STRUCTURE	
-----------	
+// STRUCTURE
+----------
 /home (popular + spread)
 /actors (popular + search)
 /films (popular + search)

@@ -1,11 +1,11 @@
 <?php
 /*
  *  MISC INIT FUNCTIONS IMMEDIATELY PRECEDING header.php
- *  
+ *
  */
 
 // Check if session valid & access allowed:
-Auth::checkpoint();
+//Auth::checkpoint();
 
 
 // Set the page id (& body tag):
@@ -31,7 +31,14 @@ $cur = $_SERVER['REQUEST_URI'];
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-$log = new Logger('name');
-$log->pushHandler(new StreamHandler('/logs/tmdb_site.log', Logger::WARNING));
-$log->warning('Foo');
-$log->error('Bar');
+use Monolog\Handler\FirePHPHandler;
+// create a log channel
+$logger = new Logger('all');
+$logger->pushHandler(new StreamHandler(__DIR__ . '/../logs/tmdb_site.log', Logger::WARNING));
+$logger->pushHandler(new FirePHPHandler());
+//throw new Exception($logger->name, 1);
+// You can now use your logger
+$logger->addInfo('My logger is now ready');
+// add records to the log
+$logger->addWarning('Foo');
+$logger->addError('Bar');

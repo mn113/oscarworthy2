@@ -1,1 +1,10 @@
-vendor
+.*
+composer.lock
+robots.txt
+config.php
+db.inc.php
+db/
+cache/
+logs/
+vendor/
+ssl/

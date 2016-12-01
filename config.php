@@ -29,11 +29,11 @@ define('MSG_RATE_SUCCESS', 'Got it, thanks for rating.');
 define('MSG_RATE_ERROR', "Epic fail happened trying to rate that.");
 
 // Error handler:
-require_once('errorhandler/ErrorHandler.php');	
+require_once('errorhandler/ErrorHandler.php');
 define('FATAL', E_USER_ERROR);
 define('ERROR', E_USER_WARNING);
 define('WARNING', E_USER_NOTICE);
-//$errorHandler = new ErrorHandler(true);	// debug value
+$errorHandler = new ErrorHandler(true);	// debug value
 
 // Includes:
 require_once('db.inc.php');
@@ -44,7 +44,7 @@ include_once('securimage/securimage.php');
 include_once('apis/RottenTomatoesApi.php');
 
 // Class autoloader:
-function __autoload($class_name) {
+spl_autoload_register(function ($class_name) {
 	$paths = array('/inc/classes/class.', '/inc/classes/static/staticclass.', '/inc/classes/core/class.');
 	foreach ($paths as $path) {
 		$file = $_SERVER{'DOCUMENT_ROOT'}.$path.$class_name.".inc.php";
@@ -53,7 +53,7 @@ function __autoload($class_name) {
 			return;
 		}
 	}
-}
+});
 
 // Composer dependencies autoload:
 require __DIR__ . '/vendor/autoload.php';
