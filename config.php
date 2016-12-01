@@ -33,13 +33,16 @@ require_once('errorhandler/ErrorHandler.php');
 define('FATAL', E_USER_ERROR);
 define('ERROR', E_USER_WARNING);
 define('WARNING', E_USER_NOTICE);
-$errorHandler = new ErrorHandler(true);	// debug value
+$errorHandler = new ErrorHandler(DEBUG_MODE);
+
+// Composer dependencies autoload:
+require_once('vendor/autoload.php');
 
 // Includes:
 require_once('db.inc.php');
 include_once('inc/functions.php');
-//include_once('FirePHPCore/FirePHP.class.php');
-//include_once('FirePHPCore/fb.php');
+include_once('FirePHPCore/FirePHP.class.php');
+include_once('FirePHPCore/fb.php');
 include_once('securimage/securimage.php');
 include_once('apis/RottenTomatoesApi.php');
 
@@ -55,8 +58,21 @@ spl_autoload_register(function ($class_name) {
 	}
 });
 
-// Composer dependencies autoload:
-require __DIR__ . '/vendor/autoload.php';
+// Logging with Monolog:
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\FirePHPHandler;
+// create a log channel
+$logger = new Logger('all');
+$logger->pushHandler(new StreamHandler(__DIR__ . '/logs/tmdb_site.log', Logger::WARNING));
+$logger->pushHandler(new FirePHPHandler());
+//throw new Exception($logger->name, 1);
+// You can now use your logger
+$logger->addInfo('My logger is now ready');
+// add records to the log
+//$logger->addWarning('Foo');
+//$logger->addError('Bar');
+
 
 // Script particularities:
 $base = basename($_SERVER['SCRIPT_NAME'], '.php');

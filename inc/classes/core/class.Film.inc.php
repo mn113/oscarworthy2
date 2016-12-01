@@ -13,7 +13,7 @@ class Film extends Entity {
 	public $languages;	// serialized
 	public $original_name;
 	public $alternative_name;
-	public $preferred_title;	
+	public $preferred_title;
 	public $overview;
 	public $imdb_id;
 	public $tagline;
@@ -29,15 +29,16 @@ class Film extends Entity {
 
 	protected $rott;	// API
 	public $rtm;		// movie
-	
 
-	function __construct($fid, $dbh = null, $tmdb = null) {
+//	$movie = $repository->load(87421);
+
+	function __construct($fid, $dbh = null, $repository = null) {
 		// Repair missed params:
 		if (!$dbh) global $dbh;
-		if (!$tmdb) global $tmdb;
-	
+		if (!$repository) global $repository;
+
 		// Dependency Injection:
-		parent::__construct($fid, $dbh, $tmdb);
+		parent::__construct($fid, $dbh, $repository);
 		$this->fid = $fid;
 		$this->rott = new RottenTomatoesApi('ecn57mpdtgkpqm8mrn3betcw', 10, '1.0', 'uk');
 
@@ -48,7 +49,7 @@ class Film extends Entity {
 			'table'				=> 'films',
 			'col_id'			=> 'film_id',
 			'cast_or_filmog'	=> 'cast',
-			'image'				=> 'poster'	
+			'image'				=> 'poster'
 		);
 	}
 
@@ -56,23 +57,23 @@ class Film extends Entity {
 	/**
 	* Query TMDb for a film's info, set properties, return 1 for success.
 	*/
-	function tmdbLookup($imdb_id = '') {	
+	function tmdbLookup($imdb_id = '') {
 		$time_start = microtime(true);
 
 		// Normal lookup:
 		if ($imdb_id == '') {
 			// Get film data from TMDb:
-			if (!($json = $this->tmdb->getMovie($this->fid))) return false; 
+			if (!($json = $this->repository->load($this->fid))) return false;
 		}
 		// IMDb lookup:
 		else {
-			if (!($json = $this->tmdb->getMovie($imdb_id, TMDB::IMDB))) return false; 
+			if (!($json = $this->repository->load($imdb_id, TMDb::IMDB))) return false;	// TODO new api
 		}
-		
+
 		$film_object = json_decode($json);
 		$f = objectToArray($film_object[0]);
 		FB::log($f, 'tmdbfilm');
-		
+
 		// Set object properties with retrieved values:
 		$this->fid = $f['id'];
 		$this->title = $f['name'];
@@ -90,7 +91,7 @@ class Film extends Entity {
 		$this->certification = $f['certification'];
 		$this->budget = $f['budget'];
 		$this->revenue = $f['revenue'];
-		$this->trailer = $f['trailer'];				
+		$this->trailer = $f['trailer'];
 		$this->genres = quickSerialize($f['genres']);
 		$this->studios = quickSerialize($f['studios']);
 		$this->version = $f['version'];
@@ -101,7 +102,7 @@ class Film extends Entity {
 
 		$this->permalink = $this->makePermalink($this->title);
 		$this->isValid = true;
-		
+
 		$this->logVars('Film->tmdbLookup()');
 
 		$time_end = microtime(true);
@@ -115,7 +116,7 @@ class Film extends Entity {
 	*/
 	function store() {
 		// Insert film record into local db
-		$sth = $this->dbh->prepare("INSERT INTO films (film_id, title, release_date, runtime, countries, poster_url, 
+		$sth = $this->dbh->prepare("INSERT INTO films (film_id, title, release_date, runtime, countries, poster_url,
 											languages, original_name, alternative_name, overview, imdb_id, tagline,
 											certification, budget, revenue, trailer, genres, studios, version,
 											last_modified_at, permalink, cast_serial, posters)
@@ -124,7 +125,7 @@ class Film extends Entity {
 											:certification, :budget, :revenue, :trailer, :genres, :studios, :version,
 											:last_modified_at, :permalink, :cast_serial, :posters)");
 
-		// Do binding:		
+		// Do binding:
 		$propertiesToBind = array('fid', 'title', 'release_date', 'runtime', 'countries', 'poster_url',
 								  'languages', 'original_name', 'alternative_name', 'overview', 'imdb_id', 'tagline',
 								  'certification', 'budget', 'revenue', 'trailer', 'genres', 'studios', 'version',
@@ -142,7 +143,7 @@ class Film extends Entity {
 			FB::log("Film {$this->fid} not stored, continuing.");
 		}
 
-		// Check result:		
+		// Check result:
 		if ($sth->rowCount() != 1) {
 			return false;
 		}
@@ -150,7 +151,7 @@ class Film extends Entity {
 			FB::log($this);
 			FB::log("Film {$this->fid} added to db.");
 			return true;
-		}			
+		}
 	}
 
 
@@ -179,7 +180,7 @@ class Film extends Entity {
 		$s = sizeof($this->cast);
 
 		for ($i = 0; $i < $s; $i++) {
-			$this->cast[$i]['permalink'] = $this->makePermalink($this->cast[$i]['name']);		
+			$this->cast[$i]['permalink'] = $this->makePermalink($this->cast[$i]['name']);
 			$this->cast[$i]['picture_url'] = $this->cast[$i]['profile'];
 		}
 	}
@@ -206,7 +207,7 @@ class Film extends Entity {
 		$i = 0;
 		// Check whether each role person is in local db:
 		foreach ($roles as $r) {
-			$person = new Person($r['person_id'], $this->dbh, $this->tmdb);
+			$person = new Person($r['person_id'], $this->dbh, $this->repository);
 			if (!$person->fetchLocal()) {
 				// Person not in local, fetch from TMDb:
 				FB::log("no local data for person {$r['person_id']}");
@@ -221,7 +222,7 @@ class Film extends Entity {
 			$this->cast[$i]['picture_url'] = $person->picture_url;
 			$this->cast[$i]['character'] = $r['character_name'];
 			$this->cast[$i]['job'] = $r['job'];
-			$i++;			
+			$i++;
 		}
 
 		$time_end = microtime(true);
@@ -303,7 +304,7 @@ class Film extends Entity {
 						$imdb_id = 'tt'.str_pad($rt_imdb, 7, 0);	// convert RT imdb_id to full imdb_id
 						FB::log($imdb_id, 'imdbid');
 						// Create a new film and lookup by its imdb_id:
-						$film = new Film(0, $this->dbh, $this->tmdb);
+						$film = new Film(0, $this->dbh, $this->repository);
 						$film->tmdbLookup($imdb_id);
 						// Make html:
 						$html .= "<li><img src='".$film->getPosterUrl('thumb')."' class='small' />".
@@ -311,7 +312,7 @@ class Film extends Entity {
 					}
 				}
 				$html .= '</ul>';
-				echo $html;			
+				echo $html;
 			}
 		}
 	}
@@ -362,14 +363,14 @@ class Film extends Entity {
 		// Prepend requested size:
 		array_unshift($sizes, $size);
 
-		// Prepare posters for searching:		
+		// Prepare posters for searching:
 		$posters = unserialize($this->posters);
 		// Find a poster of the requested size:
 		foreach ($sizes as $size) {
 			foreach ($posters as $wrap => $p) {
 				if ($p['image']['size'] == $size) {
 					// Found one:
-					$p_url = $p['image']['url']; 
+					$p_url = $p['image']['url'];
 					break;
 				}
 			}
@@ -418,7 +419,7 @@ class Film extends Entity {
 		}
 		else return 'not found';
 	}
-	
+
 
 	/**
 	* Print HTML table.
@@ -439,7 +440,7 @@ class Film extends Entity {
 					echo "</tr>";
 				}
 			}
-			echo "</table>";	
+			echo "</table>";
 		}
 		else {
 			echo "Cast not available.";
@@ -450,9 +451,9 @@ class Film extends Entity {
 		if (isset($this->cast)) {
 			foreach($this->cast as $p) {
 				extract($p, EXTR_PREFIX_ALL, 'p');
-	
+
 				$crewlink = "<a href='/person/$p_id/$p_permalink'>$p_name</a>";
-	
+
 				switch ($p_job) {
 					// Directed by:
 					case 'Director':
@@ -522,8 +523,8 @@ class Film extends Entity {
 			echo "</dl>";
 		}
 		else {
-			echo "Crew not available.";	
+			echo "Crew not available.";
 		}
 	} // end displayCrew()
-	
+
 } // end class Film

@@ -10,6 +10,7 @@ return array(
     'Symfony\\Component\\OptionsResolver\\' => array($vendorDir . '/symfony/options-resolver'),
     'Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
     'React\\Promise\\' => array($vendorDir . '/react/promise/src'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'GuzzleHttp\\Subscriber\\Retry\\' => array($vendorDir . '/guzzlehttp/retry-subscriber/src'),
     'GuzzleHttp\\Subscriber\\Log\\' => array($vendorDir . '/guzzlehttp/log-subscriber/src'),
     'GuzzleHttp\\Subscriber\\Cache\\' => array($vendorDir . '/guzzlehttp/cache-subscriber/src'),

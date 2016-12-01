@@ -1,12 +1,14 @@
 //	awards: write 'actor for film' in list
 //	db: need way to indicate merged entities -> aliases table
 //	awards: list sorting by ajax plugin
-//0	check local PHP version ok -> aim for 5.6
+//	check local PHP version ok -> aim for 5.6
 
-0	my ErrorHandler vs Monolog vs FirePHP vs ?
-0	check for other APIs
-0	new TMDb API version
-0	serve with composer?
+//	new TMDb API version
+0	FirePHP or ChromePHP via Composer
+	my ErrorHandler vs Monolog vs FirePHP vs ?
+	new RottenTomatoes API version?
+
+	0	update Person class to new Tmdb
 
 0	fix utf-8 issues with db
 

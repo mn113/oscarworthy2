@@ -1,6 +1,6 @@
 {
     "require": {
-        "php-tmdb/api": "~2.0",
+        "php-tmdb/api": "~2.1",
         "monolog/monolog": "1.0.*"
     }
 }
