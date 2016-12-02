@@ -18,7 +18,7 @@ $cache->check();
 $_SESSION['votes'] = array();
 
 // Make the person:
-$person = new Person($pid, $dbh, $tmdb);
+$person = new Person($pid, $dbh, $peoplerepository);
 
 // Check for person data locally:
 if (!$person->fetchLocal()) {	// If we don't have them:
@@ -47,16 +47,16 @@ if ($person->isValid):
 	// Temporary links:
 	$pid0 = (int)$pid - 1;
 	$pid2 = (int)$pid + 1;
-	echo "<a href='/person/$pid2' class='next'>Next</a>"; 
+	echo "<a href='/person/$pid2' class='next'>Next</a>";
 	echo "<a href='/person/$pid0' class='prev'>Prev&nbsp;</a>"; ?>
 
 	<h1><?php echo $person->getName(); ?></h1>
-	
+
 	<div id="info">
 		<div class="frame"><?php echo $person->getPicture('profile'); ?></div>
 		<?php echo $person->getMinutiae(); ?>
 		<h4>Awards</h4>
-		<?php if ($person->getAwards()) $person->displayAwards(); ?>	
+		<?php if ($person->getAwards()) $person->displayAwards(); ?>
 	</div>
 	<?php
 		// Prepare to set stars:
@@ -65,7 +65,7 @@ if ($person->isValid):
 		if (User::isLogged()) {
 			$starhelper->getMemberRatings();
 		}
-	?>	
+	?>
 	<div id="listing">
 		<div id="bio_box"><?php echo $person->getBio(); ?></div>
 		<div id="filmography_box">

@@ -18,7 +18,7 @@ $cache->check();
 $_SESSION['votes'] = array();
 
 // Make the film:
-$film = new Film($fid, $dbh, $tmdb);
+$film = new Film($fid, $dbh, $movierepository);
 
 // Check for film data locally:
 if (!$film->fetchLocal()) {	// If we don't have it:
@@ -47,7 +47,7 @@ if ($film->isValid):
 	// Temporary links:
 	$fid0 = (int)$fid - 1;
 	$fid2 = (int)$fid + 1;
-	echo "<a href='/film/$fid2' class='next'>Next</a>"; 
+	echo "<a href='/film/$fid2' class='next'>Next</a>";
 	echo "<a href='/film/$fid0' class='prev'>Prev&nbsp;</a>"; ?>
 
 	<h1><?php echo $film->getTitle(); ?> (<?php echo $film->getYear(); ?>)</h1>
@@ -67,7 +67,7 @@ if ($film->isValid):
 			<dt>Tomatometer:</dt><dd><?php echo $film->getRottenScore(); ?></dd>
 		</dl>
 		<h4>Awards</h4>
-		<?php if ($film->getAwards()) $film->displayAwards(); ?>	
+		<?php if ($film->getAwards()) $film->displayAwards(); ?>
 
 		<h4>Similar Films:</h4>
 		<?php $film->displayRottenSimilar(); ?>
@@ -79,7 +79,7 @@ if ($film->isValid):
 		if (User::isLogged()) {
 			$starhelper->getMemberRatings();
 		}
-	?>	
+	?>
 	<div id="listing">
 		<h2>Crew</h2>
 		<div id="crew_box">

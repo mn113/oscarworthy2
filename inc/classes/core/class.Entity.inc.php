@@ -13,33 +13,33 @@ abstract class Entity {
 		'cast_or_filmog',
 		'image'
 	);
-	
+
 	// Common properties:
-	public $id;					// pid or fid	
+	public $id;					// pid or fid
 	public $version;
 	public $last_modified_at;
 	public $permalink;
 	public $import_date;
 	public $isValid = false;	// until true
 	public $awards;
-	
+
 	// DB conn handles will reference global dependencies
 	protected $dbh;
 	protected $tmdb;
-	
 
-	function __construct($id, $dbh, $tmdb) {
+
+	function __construct($id, $dbh, $repository) {
 		$this->id = $id;
 		// Dependency Injection:
 		$this->dbh = $dbh;
-		$this->tmdb = $tmdb;
+		$this->repository = $repository;
 	}
 
 	function __destruct() {
 		// Cleanup:
 		$this->dbh = null;
 	}
-	
+
 
 	/**
 	* Select a film/person from local db by its id, return false if not found.
@@ -63,16 +63,16 @@ abstract class Entity {
 				$this->$key = $val;
 			}
 			$this->isValid = true;
-//			$this->logVars("{$this->guts['type']}->fetchLocal()");		
+//			$this->logVars("{$this->guts['type']}->fetchLocal()");
 
-			return true;	// Record found and fetched		
+			return true;	// Record found and fetched
 		}
 		else {
 			return false; // Unique record not found
 		}
 	}
-	
-	
+
+
 	/**
 	* Store all roles for current cast in roles table.
 	*/
@@ -108,7 +108,7 @@ abstract class Entity {
 	function delete() {
 		$sth = $this->dbh->prepare("DELETE FROM {$this->guts['table']} WHERE {$this->guts['col_id']} = ? LIMIT 1");
 		$sth->bindParam(1, $this->id, PDO::PARAM_INT);
-		$sth->execute();		
+		$sth->execute();
 	}
 
 
@@ -152,7 +152,7 @@ abstract class Entity {
 			return false;
 		}
 	}
-	
+
 
 	/**
 	* Display awards section.
@@ -165,7 +165,7 @@ abstract class Entity {
 				$html .= "<li>$ayear: $won $award_for at $ceremony</li>";
 			}
 			$html .= '</ul>';
-			echo $html;		
+			echo $html;
 		}
 	}
 
@@ -179,7 +179,7 @@ abstract class Entity {
 
 		// Differentiate between types:
 		$keys = is_a($this, 'Film') ? $filmkeys : $personkeys;
-				
+
 		foreach ($keys as $key) {
 			$arr[$key] = $this->$key;
 		}

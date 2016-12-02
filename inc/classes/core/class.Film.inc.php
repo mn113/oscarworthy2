@@ -30,12 +30,13 @@ class Film extends Entity {
 	protected $rott;	// API
 	public $rtm;		// movie
 
-//	$movie = $repository->load(87421);
-
 	function __construct($fid, $dbh = null, $repository = null) {
 		// Repair missed params:
 		if (!$dbh) global $dbh;
-		if (!$repository) global $repository;
+		if (!$repository) {
+			global $movierepository;
+			$repository = $movierepository;
+		}
 
 		// Dependency Injection:
 		parent::__construct($fid, $dbh, $repository);

@@ -5,16 +5,16 @@ class Filmography {
 	public $pid;
 	public $data;
 	protected $dbh;
-	protected $tmdb;
+	protected $repository;
 
 
-	function __construct($dbh, $tmdb, $pid, array $filmog, string $serialized) {
+	function __construct($dbh, $repository, $pid, array $filmog, string $serialized) {
 		$this->dbh = $dbh;
-		$this->tmdb = $tmdb;
+		$this->$repository = $repository;
 		$this->pid = $pid;
 
 		if ($filmog) {
-			$this->data = $filmog;	
+			$this->data = $filmog;
 		}
 		elseif ($serialized) {
 			$this->data = unserialize($serialized);
@@ -27,7 +27,7 @@ class Filmography {
 	*/
 	function fetchLocal() {
 		for ($i = 0, $s = sizeof($this->data); $i < $s; $i++) {
-			$this->data[$i]['permalink'] = $this->makePermalink($this->data[$i]['name']);		
+			$this->data[$i]['permalink'] = $this->makePermalink($this->data[$i]['name']);
 			$this->data[$i]['poster_url'] = $this->data[$i]['poster'];
 		}
 		$this->sortIt();
@@ -49,7 +49,7 @@ class Filmography {
 		// Check whether each film is in local db:
 		foreach ($roles as $r) {
 			extract($r, EXTR_PREFIX_ALL, 'r');
-			$film = new Film($r_film_id, $this->dbh, $this->tmdb);
+			$film = new Film($r_film_id, $this->dbh, $this->repository);
 			if (!$film->fetchLocal()) {
 				// Film not in local, fetch from TMDb:
 				FB::log("no local data for film $r_film_id");
@@ -68,9 +68,9 @@ class Filmography {
 			$this->data[$i]['job'] = $r_job;
 			$i++;
 		}
-		
+
 		$this->sortIt();
-		
+
 		$time_end = microtime(true);
 		FB::log('Filmography->fetchDeep()', $time_end - $time_start);
 		return true;
@@ -84,7 +84,7 @@ class Filmography {
 		// Use usort with anonymous comparison function:
 		return usort($this->data, function($a, $b) {
 		    return strcmp($b['release'], $a['release']);
-		});	
+		});
 	}
 
 
@@ -92,8 +92,8 @@ class Filmography {
 	* Print HTML.
 	*/
 	function display() {
-	
-	
+
+
 	}
 
 }

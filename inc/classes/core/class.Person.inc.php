@@ -16,13 +16,16 @@ class Person extends Entity {
 	public $rating;
 
 
-	function __construct($pid, $dbh = null, $tmdb = null) {
+	function __construct($pid, $dbh = null, $repository = null) {
 		// Repair missed params:
 		if (!$dbh) global $dbh;
-		if (!$tmdb) global $tmdb;
-	
+		if (!$repository) {
+			global $peoplerepository;
+			$repository = $peoplerepository;
+		}
+
 		// Dependency Injection:
-		parent::__construct($pid, $dbh, $tmdb);
+		parent::__construct($pid, $dbh, $repository);
 		$this->pid = $pid;
 
 		// Define this Entity as a Person:
@@ -43,12 +46,12 @@ class Person extends Entity {
 		$time_start = microtime(true);
 
 		// Get person data from TMDb:
-		if (!($json = $this->tmdb->getPerson($this->pid))) return false; 
+		if (!($json = $this->repository->load($this->pid))) return false;
 
 		$person_object = json_decode($json);
 		$p = objectToArray($person_object[0]);
 		FB::log($p, 'tmdbperson');
-		
+
 		// Set object properties with retrieved values:
 		$this->name = $p['name'];
 		$this->picture_url = @$p['profile'][0]['image']['url'];	// USING @ TO SUPPRESS CONSTANT NOTICES "Undefined offset: 0"
@@ -59,20 +62,20 @@ class Person extends Entity {
 		$this->last_modified_at = $p['last_modified_at'];
 		$this->filmography = $p['filmography'];
 //		$this->filmography = $this->sortFilmography2();
-		
+
 		$this->filmography_serial = serialize($this->filmography);
 		$this->photos = serialize($p['profile']);
-		
+
 		$this->permalink = $this->makePermalink($this->name);
 		$this->isValid = true;
-		
+
 		$this->logVars('Person->tmdbLookup()');
 
 		$time_end = microtime(true);
 		FB::log('Person->tmdbLookup()', $time_end - $time_start);
 		return true;
 	}
-	
+
 
 	/**
 	* Insert current properties into people table, return 1 for success.
@@ -83,7 +86,7 @@ class Person extends Entity {
 											version, last_modified_at, permalink, filmography_serial, photos, import_date)
 									VALUES (:pid, :name, :picture_url, :bio, :birthday, :birthplace,
 											:version, :last_modified_at, :permalink, :filmography_serial, :photos, NOW())");
-		// Do binding:		
+		// Do binding:
 		$propertiesToBind = array('pid', 'name', 'picture_url', 'bio', 'birthday', 'birthplace', 'version', 'last_modified_at',
 									'permalink', 'filmography_serial', 'photos');
 		foreach ($propertiesToBind as $p) {
@@ -128,7 +131,7 @@ class Person extends Entity {
 			// Custom property assigmnent:
 			$this->name = $this->fullname;
 			$this->filmography = unserialize($this->filmography_serial);
-			return true;		
+			return true;
 		}
 		else {
 			return false;
@@ -145,7 +148,7 @@ class Person extends Entity {
 		$s = sizeof($this->filmography);
 
 		for ($i = 0; $i < $s; $i++) {
-			$this->filmography[$i]['permalink'] = $this->makePermalink($this->filmography[$i]['name']);		
+			$this->filmography[$i]['permalink'] = $this->makePermalink($this->filmography[$i]['name']);
 			$this->filmography[$i]['poster_url'] = $this->filmography[$i]['poster'];
 		}
 
@@ -186,9 +189,9 @@ class Person extends Entity {
 			$this->filmography[$i]['job'] = $r['job'];
 			$i++;
 		}
-		
+
 		$this->sortFilmography2();
-		
+
 		$time_end = microtime(true);
 		FB::log('Person->fetchFilmographyFull()', $time_end - $time_start);
 		return true;
@@ -214,7 +217,7 @@ class Person extends Entity {
 		// Use usort with anonymous comparison function:
 		return usort($this->filmography, function($a, $b) {
 		    return strcmp($b['release'], $a['release']);
-		});	
+		});
 	}
 
 
@@ -233,21 +236,21 @@ class Person extends Entity {
 		return $html;
 	}
 
-	// Returns plain URL string:	
+	// Returns plain URL string:
 	function getPictureUrl($size = 'profile') {
 		// Prepare list of acceptable sizes:
 		$sizes = array('profile', 'original', 'thumb', 'h632');
 		// Prepend requested size:
 		array_unshift($sizes, $size);
 
-		// Prepare photos for searching:		
+		// Prepare photos for searching:
 		$photos = unserialize($this->photos);
 		// Find a photo of the requested size:
 		foreach ($sizes as $size) {
 			foreach ($photos as $p) {
 				if ($p['image']['size'] == $size) {
 					// Found one:
-					$p_url = $p['image']['url']; 
+					$p_url = $p['image']['url'];
 					break;
 				}
 			}
@@ -267,7 +270,7 @@ class Person extends Entity {
 
 		return $p_url;
 	}
-	
+
 	function getMinutiae() {
 		if ($this->birthday == '0000-00-00') $this->birthday = 'unknown';
 		if (strlen($this->birthplace) < 1) $this->birthplace = 'unknown';
@@ -275,13 +278,13 @@ class Person extends Entity {
 				"<dt>Birthday:</dt><dd>{$this->birthday}</dd>".
 				"<dt>Birthplace:</dt><dd>{$this->birthplace}</dd>".
 				"</dl>";
-		return $html;		
+		return $html;
 	}
 
 	function getBio() {
 		return "<p>".Bio::stripWikiText($this->bio)."</p>";
 	}
-	
+
 
 	/**
 	* Print HTML tables.
@@ -293,12 +296,12 @@ class Person extends Entity {
 		foreach ($f as $i => $cat) {
 			$f[$i] = array('html' => '<table>', 'count' => 0);
 		}
-		
+
 		foreach($this->filmography as $filmog) {
 			extract($filmog, EXTR_PREFIX_ALL, 'f');
 			$f_year = year($f_release);
 			$hash = hashRole($f_id, $f_job, $this->pid);
-			
+
 			if ($f_job == 'Actor') {
 				// Prepare the table row for cast (with stars):
 				$actr  = '<tr>';
@@ -309,7 +312,7 @@ class Person extends Entity {
 				// Awards?
 				if (0) {
 					$actr .= "<td></td>";
-				}				
+				}
 				$actr .= "<td>".StarHelper::displayStars($hash)."</td>";
 				$actr .= "</tr>";
 				$acting .= $actr;
@@ -324,8 +327,8 @@ class Person extends Entity {
 				$tr .= "<td>$f_job</td>";
 				$tr .= "<td>$f_year</td>";
 				$tr .= "<td><a href='/film/$f_id/$f_permalink'>$f_name</a></td>";
-				$tr .= "</tr>";		
-				
+				$tr .= "</tr>";
+
 				// Put the crew table row in the appropriate table:
 				switch($f_job) {
 					// Directed by:
@@ -383,9 +386,9 @@ class Person extends Entity {
 					default:
 						// nada
 				} // end switch
-			} // end else	
+			} // end else
 		} // end foreach
-		
+
 		// Output tables:
 		foreach ($f as $cat => $arr) {
 			if ($f[$cat]['count'] > 0) {
